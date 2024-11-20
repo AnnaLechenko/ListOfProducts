@@ -1,4 +1,4 @@
-package com.annalech.listofproducts.data
+package com.annalech.listofproducts.domain
 
 class GetListShopListUseCase (private val repository: ShopListRepository){
     fun getShopList(): List<ShopItem>{

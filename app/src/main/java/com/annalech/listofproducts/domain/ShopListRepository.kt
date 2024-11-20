@@ -1,10 +1,10 @@
-package com.annalech.listofproducts.data
+package com.annalech.listofproducts.domain
 
 interface ShopListRepository {
     fun addItemToTheShopList(shopItem: ShopItem)
     fun deleteItemInList(shopItem: ShopItem)
     fun   editItemInList(shopItem: ShopItem)
-    fun getShopItem(itemId:Int):ShopItem
+    fun getShopItem(itemId:Int): ShopItem
     fun getShopList(): List<ShopItem>
 
 
