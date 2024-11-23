@@ -10,15 +10,23 @@ import com.annalech.listofproducts.domain.ShopItem
 
 class MainViewModel : ViewModel() {
     private val repository = ShopListRepositoryImpl
-    val shopListLiveData = MutableLiveData<List<ShopItem>>()
+
 
     val useCaseDeleteItem = DeleteShopItemInListUseCase(repository)
     val useCaseGetList = GetListShopListUseCase(repository)
-    val useCaseGetItem = EditShopItemUseCase(repository)
+    val useCaseEditItem = EditShopItemUseCase(repository)
 
-    fun getShopList() {
-        val list = useCaseGetList.getShopList()
-        shopListLiveData.value = list
+    val shopListLiveData = useCaseGetList.getShopList()
+
+
+
+    fun deleteItemLD(item: ShopItem){
+        useCaseDeleteItem.deleteItemInList(item)
+    }
+
+    fun editEnanleStateItemLD(item: ShopItem){
+        val newItem = item.copy(enabled = !item.enabled)
+        useCaseEditItem.editItemInList(newItem)
     }
 
 
