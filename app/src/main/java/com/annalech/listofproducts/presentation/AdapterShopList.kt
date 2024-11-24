@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
@@ -15,13 +16,16 @@ import com.annalech.listofproducts.domain.ShopItem
 
 class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>() {
 
-
-
         var  shopList = listOf<ShopItem>()
             set(value){
+                val collback = ShopListDiffCollback(shopList,value)
+                val diff = DiffUtil.calculateDiff(collback)
+                diff.dispatchUpdatesTo(this)
                 field = value
-                notifyDataSetChanged()
+
             }
+
+
         var count = 0
 
         var onLongClickShopItemListner :((ShopItem) -> Unit)?= null
@@ -55,6 +59,7 @@ class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>
 
         holder.view.setOnLongClickListener{
             onLongClickShopItemListner?.invoke( item)
+            Log.d("MainActivityShopItem", "изменение цвета при нажатии долгом $item $count")
             true
         }
 

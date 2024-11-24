@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         setupLongCliclListner()
         /*короткий клик*/
         setupShortCliclListner()
+        /*удаление свайпом*/
         setupSwipeToDelete(recyclerViewList)
     }
 
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupLongCliclListner() {
         adapterShopList.onLongClickShopItemListner = {
             viewModel.editEnanleStateItemLD(it)
+            Log.d("MainActivityShopItem", "удержание кнопки")
         }
     }
 
