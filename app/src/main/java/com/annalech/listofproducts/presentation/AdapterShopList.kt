@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
 import com.annalech.listofproducts.domain.ShopItem
@@ -21,7 +22,12 @@ class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>
                 field = value
                 notifyDataSetChanged()
             }
-var count = 0
+        var count = 0
+
+        var onLongClickShopItemListner :((ShopItem) -> Unit)?= null
+      var onShortClickShopItemListner : ((ShopItem) -> Unit)? = null
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
 
@@ -46,6 +52,16 @@ var count = 0
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         val item = shopList[position]
+
+        holder.view.setOnLongClickListener{
+            onLongClickShopItemListner?.invoke( item)
+            true
+        }
+
+        holder.view.setOnClickListener{
+            Log.d("MainActivityShopItem", "Переход на другую страницу при нажатии $item $count")
+            onShortClickShopItemListner?.invoke(item)
+        }
 
         if (item.enabled){
             holder.tvName.text = item.name
@@ -104,4 +120,14 @@ var count = 0
     val enabledCONST = ENABLED
     val disabledCONST = DISABLED
     val max_poolCONST = POOL_MAX_SIZE
+
+
+    interface OnLongClickItemShopListnerIF{
+        fun onLongClickShopItem(shopItem: ShopItem)
+    }
+
+    interface OnShortClickListnerIF{
+        fun onShortClickItemShop(shopItem: ShopItem)
+    }
+
 }
