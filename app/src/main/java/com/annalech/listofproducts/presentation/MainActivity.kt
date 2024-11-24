@@ -2,14 +2,11 @@ package com.annalech.listofproducts.presentation
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
-import com.annalech.listofproducts.domain.ShopItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         adapterShopList = AdapterShopList()
         recyclerView.adapter = adapterShopList
 
+        recyclerView.recycledViewPool.setMaxRecycledViews(adapterShopList.enabledCONST, adapterShopList.max_poolCONST)
+        recyclerView.recycledViewPool.setMaxRecycledViews(adapterShopList.disabledCONST, adapterShopList.max_poolCONST)
     }
 
 
