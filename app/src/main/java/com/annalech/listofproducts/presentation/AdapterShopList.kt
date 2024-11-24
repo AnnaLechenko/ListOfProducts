@@ -8,22 +8,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
 import com.annalech.listofproducts.domain.ShopItem
 
 
 
-class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>() {
+class AdapterShopList : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCollback()) {
 
-        var  shopList = listOf<ShopItem>()
-            set(value){
-                val collback = ShopListDiffCollback(shopList,value)
-                val diff = DiffUtil.calculateDiff(collback)
-                diff.dispatchUpdatesTo(this)
-                field = value
-
-            }
 
 
         var count = 0
@@ -50,12 +43,12 @@ class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>
         return ShopItemViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-      return  shopList.size
-    }
+//    override fun getItemCount(): Int {
+//      return  shopList.size
+//    }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val item = shopList[position]
+        val item = getItem(position)
 
         holder.view.setOnLongClickListener{
             onLongClickShopItemListner?.invoke( item)
@@ -89,18 +82,10 @@ class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>
     }
 
 
-    override fun onViewRecycled(holder: ShopItemViewHolder) {
-        super.onViewRecycled(holder)
-        holder.tvName.text = ""
-        holder.tvCount.text = ""
-        holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,
-            android.R.color.white))
-    }
-
 
     override fun getItemViewType(position: Int): Int {
 
-        val item = shopList[position]
+        val item = getItem(position)
        return if (item.enabled){
             return  ENABLED
         } else{ return  DISABLED }
@@ -109,11 +94,7 @@ class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>
 
 
 
-    class ShopItemViewHolder( val view:View):RecyclerView.ViewHolder(view){
 
-        val tvName = view.findViewById<TextView>(R.id.name_item)
-        val tvCount =view.findViewById<TextView>(R.id.item_count)
-    }
 
 
     companion object{
