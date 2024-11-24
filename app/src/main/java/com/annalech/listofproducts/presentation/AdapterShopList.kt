@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
 import com.annalech.listofproducts.domain.ShopItem
@@ -34,8 +35,28 @@ class AdapterShopList : RecyclerView.Adapter<AdapterShopList.ShopItemViewHolder>
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         val item = shopList[position]
 
-        holder.tvName.text = item.name
-        holder.tvCount.text = item.name
+        val status = if (item.enabled) {
+           "Active"
+        } else{
+            "Not Active"
+        }
+        if (item.enabled){
+            holder.tvName.text = "${item.name} $status"
+            holder.tvCount.text = item.count.toString()
+            holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,
+                android.R.color.holo_red_light))
+        }
+
+
+    }
+
+
+    override fun onViewRecycled(holder: ShopItemViewHolder) {
+        super.onViewRecycled(holder)
+        holder.tvName.text = ""
+        holder.tvCount.text = ""
+        holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,
+            android.R.color.white))
     }
 
 
