@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.annalech.listofproducts"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.annalech.listofproducts"
