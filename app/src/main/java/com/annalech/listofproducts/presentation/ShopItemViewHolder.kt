@@ -9,4 +9,5 @@ import com.annalech.listofproducts.R
 
         val tvName = view.findViewById<TextView>(R.id.name_item)
         val tvCount =view.findViewById<TextView>(R.id.item_count)
+
     }
