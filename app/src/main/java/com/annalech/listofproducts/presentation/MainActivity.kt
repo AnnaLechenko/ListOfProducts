@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         val  buttunAddItem = findViewById<FloatingActionButton>(R.id.button_add_item)
         buttunAddItem.setOnClickListener{
             val intent = ShopItemActivity.newIntentAddItem(this)
+            Log.d("MainActivityShopItem", "вызов 2 активити из 1 по кнопке добавления")
             startActivity(intent)
         }
 
@@ -83,7 +84,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupShortCliclListner() {
         adapterShopList.onShortClickShopItemListner = {
             Log.d("MainActivityShopItem", "отображение перехода ")
-            val intent = ShopItemActivity.newIntentEditItem(this,it.id)
+            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+            Log.d("ShopItemActivity", "передан из 1 активит во 2 ай ди")
             startActivity(intent)
         }
     }
