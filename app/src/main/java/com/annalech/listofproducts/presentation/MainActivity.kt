@@ -1,5 +1,6 @@
 package com.annalech.listofproducts.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -8,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,10 +29,13 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopListLiveData.observe(this){
             Log.d("ViewModelTest", it.toString())
             adapterShopList.submitList(it)
-
-
         }
 
+        val  buttunAddItem = findViewById<FloatingActionButton>(R.id.button_add_item)
+        buttunAddItem.setOnClickListener{
+            val intent = ShopItemActivity.newIntentAddItem(this)
+            startActivity(intent)
+        }
 
 
     }
@@ -77,6 +83,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupShortCliclListner() {
         adapterShopList.onShortClickShopItemListner = {
             Log.d("MainActivityShopItem", "отображение перехода ")
+            val intent = ShopItemActivity.newIntentEditItem(this,it.id)
+            startActivity(intent)
         }
     }
 

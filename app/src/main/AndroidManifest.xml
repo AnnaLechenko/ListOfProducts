@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ListOfProducts"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ShopItemActivityChanges"
+            android:name=".presentation.ShopItemActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"
             />
