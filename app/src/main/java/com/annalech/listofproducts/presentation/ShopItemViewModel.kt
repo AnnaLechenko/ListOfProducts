@@ -12,19 +12,19 @@ import com.annalech.listofproducts.domain.ShopItem
 class ShopItemViewModel : ViewModel(){
     private val repository = ShopListRepositoryImpl
 
-   private val _errorInputName_LD = MutableLiveData<Boolean>()
-       val inputErrorName_LD : LiveData<Boolean>
-           get() =  _errorInputName_LD
+    private val _errorInputName_LD = MutableLiveData<Boolean>()
+    val errorInputName_LD : LiveData<Boolean>
+        get() =  _errorInputName_LD
 
     private val _errorInputCount_LD = MutableLiveData<Boolean>()
     val errorInputCount_LD : LiveData<Boolean>
-        get() =  _errorInputName_LD
+        get() =  _errorInputCount_LD
 
 
 
-    private val _shouldCloseScreenLD = MutableLiveData<Unit>()
-    val shouldCloseScreenLD : LiveData<Unit>
-        get() = _shouldCloseScreenLD
+    private val _shouldCloseScreen_LD = MutableLiveData<Unit>()
+    val shouldCloseScreen_LD : LiveData<Unit>
+        get() = _shouldCloseScreen_LD
 
 
 
@@ -39,7 +39,7 @@ class ShopItemViewModel : ViewModel(){
         get() = _shopItem_LD
 
     fun getShopItemInVM(ItemId:Int){
-       val item =  getItemUseCase.getShopItem(ItemId)
+        val item =  getItemUseCase.getShopItem(ItemId)
         _shopItem_LD.value = item
 
     }
@@ -48,11 +48,11 @@ class ShopItemViewModel : ViewModel(){
         val name = parseName(inputName)
         val count = parseCount(inputCount)
         val fileValied = validateInput(name,count)
-       if (fileValied){
-           val newItem = ShopItem(name,count,true)
-           addItemUseCase.addItemToTheShopList(newItem)
-           finishWork()
-       }
+        if (fileValied){
+            val newItem = ShopItem(name,count,true)
+            addItemUseCase.addItemToTheShopList(newItem)
+            finishWork()
+        }
     }
 
     fun editShopItemInVM(inputName:String?, inputCount : String?){
@@ -60,16 +60,16 @@ class ShopItemViewModel : ViewModel(){
         val count = parseCount(inputCount)
         val fileValied = validateInput(name,count)
         if (fileValied){
-         _shopItem_LD.value?.let {
-             val oldItem = it.copy(name = name, count = count)
-             editItemUseCase.editItemInList(it)
-             finishWork() }
+            _shopItem_LD.value?.let {
+                val oldItem = it.copy(name = name, count = count)
+                editItemUseCase.editItemInList(oldItem)
+                finishWork() }
 
         }
     }
 
     fun parseName(inputName:String?):String{
-           return inputName?.trim()?: ""
+        return inputName?.trim()?: ""
     }
 
     fun parseCount(inputCount:String?):Int{
@@ -80,7 +80,6 @@ class ShopItemViewModel : ViewModel(){
         }
     }
 
-
     private fun validateInput(name: String,count:Int):Boolean{
         var result = true
         if (name.isBlank()){
@@ -90,8 +89,8 @@ class ShopItemViewModel : ViewModel(){
         if (count<=0){
             _errorInputCount_LD.value = true
             result =false}
-    return result
-        }
+        return result
+    }
 
 
     public fun resetErrorInputName(){ //метод сброса значение ошибки
@@ -105,8 +104,9 @@ class ShopItemViewModel : ViewModel(){
     }
 
     private fun finishWork(){
-        _shouldCloseScreenLD.value = Unit
+        _shouldCloseScreen_LD.value = Unit
     }
 
 
 }
+
