@@ -83,10 +83,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupShortCliclListner() {
         adapterShopList.onShortClickShopItemListner = {
-            Log.d("MainActivityShopItem", "отображение перехода ")
+
             val intent = ShopItemActivity.newIntentEditItem(this, it.id)
             Log.d("ShopItemActivity", "передан из 1 активит во 2 ай ди")
             startActivity(intent)
+            Log.d("MainActivityShopItem", "отображение перехода ")
         }
     }
 
