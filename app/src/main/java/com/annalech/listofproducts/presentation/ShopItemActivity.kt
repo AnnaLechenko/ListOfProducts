@@ -9,13 +9,7 @@ import com.annalech.listofproducts.domain.ShopItem
 
 class ShopItemActivity : AppCompatActivity() {
 
-//    private lateinit var titleName :TextInputLayout
-//    private lateinit var titleCount:TextInputLayout
-//    private lateinit var etName:EditText
-//    private lateinit var etCount:EditText
-//    private lateinit var buttonSave:Button
-//
-//    private lateinit var viewModel: ShopItemViewModel
+
     private var screenMode = MODE_UNKNOW
     private var shopItemId = ShopItem.UNDEFINED_ID
 
@@ -24,24 +18,11 @@ class ShopItemActivity : AppCompatActivity() {
         setContentView(R.layout.shop_item_container)
 
 
-
-//        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
-//        Log.d("ShopItemActivity",mode.toString())
-
         parseIntent()
-//        Log.d("ShopItemActivity", "parse intent suscess")
-//        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
-//        xmlView()
-//        addTextChangeListner()
 
-     launchRighMode()
-
-//        observeViewModel()
-//
-//
-//
-//
-
+        if(savedInstanceState==null){ //если не было ранее запущено активити онКреейт -то выполняеся блок выбоора фрагмента
+            launchRighMode()
+        }
 
     }
 
@@ -55,70 +36,9 @@ class ShopItemActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.shop_item_container, fragment)
+            .replace(R.id.shop_item_container, fragment)
             .commit()
     }
-
-//    private fun observeViewModel(){
-//        viewModel.errorInputCount_LD.observe(this){
-//            val message =   if(it){
-//                getString(R.string.error_input_count)
-//            } else{
-//                null
-//            }
-//            titleCount.error = message
-//        }
-//        viewModel.errorInputName_LD.observe(this){
-//            val message =   if(it){
-//                getString(R.string.error_input_name)
-//            } else{
-//                null
-//            }
-//            titleName.error = message
-//        }
-//        viewModel.shouldCloseScreen_LD.observe(this){
-//            finish()
-//        }
-//    }
-//
-//    private fun addTextChangeListner(){
-//        etName.addTextChangedListener(object : TextWatcher{
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                viewModel.resetErrorInputName()
-//            }
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//
-//        })
-//        etCount.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                viewModel.resetErrorInputCount()
-//            }
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//        })
-//    }
-//
-//
-//    private fun launchEditMode(){
-//        viewModel.getShopItemInVM(shopItemId)
-//        viewModel.shopItem_LD.observe(this){
-//            etName.setText(it.name)
-//            etCount.setText(it.count.toString())
-//        }
-//        buttonSave.setOnClickListener{
-//            viewModel.editShopItemInVM(etName.text?.toString(), etCount.text?.toString())
-//        }
-//    }
-//    private fun launchAddMode(){
-//        buttonSave.setOnClickListener{
-//            viewModel.addShopItemInVM(etName.text?.toString(), etCount.text?.toString())
-//        }
-//    }
 
     private fun parseIntent(){
         if(!intent.hasExtra(EXTRA_SCREEN_MODE)){
@@ -139,13 +59,6 @@ class ShopItemActivity : AppCompatActivity() {
     }
 
 
-//    private fun xmlView(){
-//        titleName   = findViewById(R.id.titleNameLayout)
-//        titleCount  = findViewById(R.id.titleCountLayout)
-//        etName  = findViewById(R.id.textInputName)
-//        etCount = findViewById(R.id.textInputCount)
-//        buttonSave  = findViewById(R.id.save_button)
-//    }
 
 
     companion object{
