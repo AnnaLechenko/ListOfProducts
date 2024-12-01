@@ -55,7 +55,6 @@ class ShopItemFragment
     ): View? {
 
         return inflater.inflate(R.layout.fragment_shop_item, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
