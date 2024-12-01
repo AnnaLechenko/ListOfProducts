@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainer
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +19,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: AdapterShopList
+    private var shopItemContainer: FragmentContainerView? = null
 
     private var count =0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        shopItemContainer = findViewById(R.id.shop_item_container)
 
         setupRecyclerView()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)  //доступ к классу с лив дата
@@ -33,14 +39,26 @@ class MainActivity : AppCompatActivity() {
 
         val  buttunAddItem = findViewById<FloatingActionButton>(R.id.button_add_item)
         buttunAddItem.setOnClickListener{
-            val intent = ShopItemActivity.newIntentAddItem(this)
-            Log.d("MainActivityShopItem", "вызов 2 активити из 1 по кнопке добавления")
-            startActivity(intent)
+            if(windowOrientationVertical()){
+                val intent = ShopItemActivity.newIntentAddItem(this)
+                Log.d("MainActivityShopItem", "вызов 2 активити из 1 по кнопке добавления")
+                startActivity(intent)
+            } else{launchFragment(ShopItemFragment.newInstanseAddItem())}
+
         }
 
 
     }
 
+    private fun windowOrientationVertical():Boolean{
+        return shopItemContainer == null
+    }
+
+    private fun launchFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction()
+            .add(R.id.shop_item_container,fragment)
+            .commit()
+    }
 
     private fun setupRecyclerView(){
         val recyclerViewList = findViewById<RecyclerView>(R.id.recyclerView_shopList)
@@ -82,12 +100,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupShortCliclListner() {
-        adapterShopList.onShortClickShopItemListner = {
+                adapterShopList.onShortClickShopItemListner = {
+                    if (windowOrientationVertical()){
+                            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+                            Log.d("ShopItemActivity", "передан из 1 активит во 2 ай ди")
+                            startActivity(intent)
+                            Log.d("MainActivityShopItem", "отображение перехода ")
+                }
+                    else{
+                        launchFragment(ShopItemFragment.newInstansEditItem(it.id))
+                    }
 
-            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
-            Log.d("ShopItemActivity", "передан из 1 активит во 2 ай ди")
-            startActivity(intent)
-            Log.d("MainActivityShopItem", "отображение перехода ")
+
         }
     }
 
