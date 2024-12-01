@@ -1,5 +1,6 @@
 package com.annalech.listofproducts.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 class ShopItemFragment
     :Fragment(){
 
+        private lateinit var onEditingFinishedListner:OnEditingFinishedListner
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
 
@@ -31,6 +33,15 @@ class ShopItemFragment
 
     private lateinit var viewModel: ShopItemViewModel
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListner){
+            onEditingFinishedListner = context
+        } else{
+            throw RuntimeException("activity must impliments OnEditingFinishedListner ")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +105,7 @@ class ShopItemFragment
             titleName.error = message
         }
         viewModel.shouldCloseScreen_LD.observe(viewLifecycleOwner){
-            activity?.onBackPressed()
+           onEditingFinishedListner?.onEditingFinished()
         }
     }
 
@@ -164,6 +175,11 @@ class ShopItemFragment
         etName  = view.findViewById(R.id.textInputName)
         etCount = view.findViewById(R.id.textInputCount)
         buttonSave  = view.findViewById(R.id.save_button)
+    }
+
+
+    interface OnEditingFinishedListner {
+        fun onEditingFinished()
     }
 
 

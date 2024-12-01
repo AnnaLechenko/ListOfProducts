@@ -3,11 +3,13 @@ package com.annalech.listofproducts.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.annalech.listofproducts.R
 import com.annalech.listofproducts.domain.ShopItem
+import com.annalech.listofproducts.presentation.ShopItemFragment.OnEditingFinishedListner
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), OnEditingFinishedListner {
 
 
     private var screenMode = MODE_UNKNOW
@@ -87,6 +89,11 @@ class ShopItemActivity : AppCompatActivity() {
 
 
 
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this@ShopItemActivity,"Sucsess", Toast.LENGTH_LONG).show()
+        finish()
     }
 
 }

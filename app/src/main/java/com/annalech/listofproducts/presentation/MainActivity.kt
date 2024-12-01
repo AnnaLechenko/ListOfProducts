@@ -3,6 +3,7 @@ package com.annalech.listofproducts.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,7 +16,7 @@ import com.annalech.listofproducts.R
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListner{
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: AdapterShopList
@@ -41,9 +42,15 @@ class MainActivity : AppCompatActivity() {
         buttunAddItem.setOnClickListener{
             if(windowOrientationVertical()){
                 val intent = ShopItemActivity.newIntentAddItem(this)
-                Log.d("MainActivityShopItem", "вызов 2 активити из 1 по кнопке добавления")
                 startActivity(intent)
-            } else{launchFragment(ShopItemFragment.newInstanseAddItem())}
+            } else{
+                launchFragment(ShopItemFragment.newInstanseAddItem())
+
+
+
+
+
+            }
 
         }
 
@@ -122,6 +129,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.editEnanleStateItemLD(it)
             Log.d("MainActivityShopItem", "удержание кнопки")
         }
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this@MainActivity,"Sucsess", Toast.LENGTH_LONG).show()
+        supportFragmentManager.popBackStack()
     }
 
 
