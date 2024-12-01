@@ -1,18 +1,26 @@
 package com.annalech.listofproducts.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainer
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
 
-class MainActivity : AppCompatActivity() {
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListner{
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: AdapterShopList
+    private var shopItemContainer: FragmentContainerView? = null
 
     private var count =0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,20 +28,46 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        shopItemContainer = findViewById(R.id.shop_item_container)
+
         setupRecyclerView()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)  //доступ к классу с лив дата
 
         viewModel.shopListLiveData.observe(this){
             Log.d("ViewModelTest", it.toString())
             adapterShopList.submitList(it)
+        }
 
+        val  buttunAddItem = findViewById<FloatingActionButton>(R.id.button_add_item)
+        buttunAddItem.setOnClickListener{
+            if(windowOrientationVertical()){
+                val intent = ShopItemActivity.newIntentAddItem(this)
+                startActivity(intent)
+            } else{
+                launchFragment(ShopItemFragment.newInstanseAddItem())
+
+
+
+
+
+            }
 
         }
 
 
-
     }
 
+    private fun windowOrientationVertical():Boolean{
+        return shopItemContainer == null
+    }
+
+    private fun launchFragment(fragment: Fragment){
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.shop_item_container,fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     private fun setupRecyclerView(){
         val recyclerViewList = findViewById<RecyclerView>(R.id.recyclerView_shopList)
@@ -75,8 +109,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupShortCliclListner() {
-        adapterShopList.onShortClickShopItemListner = {
-            Log.d("MainActivityShopItem", "отображение перехода ")
+                adapterShopList.onShortClickShopItemListner = {
+                    if (windowOrientationVertical()){
+                            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+                            Log.d("ShopItemActivity", "передан из 1 активит во 2 ай ди")
+                            startActivity(intent)
+                            Log.d("MainActivityShopItem", "отображение перехода ")
+                }
+                    else{
+                        launchFragment(ShopItemFragment.newInstansEditItem(it.id))
+                    }
+
+
         }
     }
 
@@ -85,6 +129,11 @@ class MainActivity : AppCompatActivity() {
             viewModel.editEnanleStateItemLD(it)
             Log.d("MainActivityShopItem", "удержание кнопки")
         }
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this@MainActivity,"Sucsess", Toast.LENGTH_LONG).show()
+        supportFragmentManager.popBackStack()
     }
 
 
