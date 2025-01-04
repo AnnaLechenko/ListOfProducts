@@ -1,5 +1,7 @@
 package com.annalech.listofproducts.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +11,8 @@ import com.annalech.listofproducts.domain.EditShopItemUseCase
 import com.annalech.listofproducts.domain.GetItemShopListUseCase
 import com.annalech.listofproducts.domain.ShopItem
 
-class ShopItemViewModel : ViewModel(){
-    private val repository = ShopListRepositoryImpl
+class ShopItemViewModel(application: Application) : AndroidViewModel(application){
+    private val repository = ShopListRepositoryImpl(application)
 
     private val _errorInputName_LD = MutableLiveData<Boolean>()
     val errorInputName_LD : LiveData<Boolean>

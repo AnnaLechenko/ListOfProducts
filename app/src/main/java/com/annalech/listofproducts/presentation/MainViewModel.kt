@@ -1,5 +1,7 @@
 package com.annalech.listofproducts.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.annalech.listofproducts.data.ShopListRepositoryImpl
@@ -8,8 +10,8 @@ import com.annalech.listofproducts.domain.EditShopItemUseCase
 import com.annalech.listofproducts.domain.GetListShopListUseCase
 import com.annalech.listofproducts.domain.ShopItem
 
-class MainViewModel : ViewModel() {
-    private val repository = ShopListRepositoryImpl
+class MainViewModel (application: Application): AndroidViewModel(application) {
+    private val repository = ShopListRepositoryImpl(application)
 
 
     val useCaseDeleteItem = DeleteShopItemInListUseCase(repository)
