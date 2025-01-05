@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import com.annalech.listofproducts.R
+import com.annalech.listofproducts.databinding.FragmentShopItemBinding
 import com.annalech.listofproducts.domain.ShopItem
 import com.annalech.listofproducts.presentation.ShopItemActivity.Companion
 
@@ -25,11 +26,16 @@ class ShopItemFragment
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
 
-    private lateinit var titleName :TextInputLayout
-    private lateinit var titleCount:TextInputLayout
-    private lateinit var etName:EditText
-    private lateinit var etCount:EditText
-    private lateinit var buttonSave:Button
+    private var _binding: FragmentShopItemBinding? = null
+    private val binding: FragmentShopItemBinding
+        get() = _binding ?: throw RuntimeException("FragmentShopItemBinding binding null")
+
+//
+//    private lateinit var titleName :TextInputLayout
+//    private lateinit var titleCount:TextInputLayout
+//    private lateinit var etName:EditText
+//    private lateinit var etCount:EditText
+//    private lateinit var buttonSave:Button
 
     private lateinit var viewModel: ShopItemViewModel
 
@@ -52,16 +58,21 @@ class ShopItemFragment
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        return inflater.inflate(R.layout.fragment_shop_item, container, false)
+    ): View {
+        _binding = FragmentShopItemBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
-        xmlView(view)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         addTextChangeListner()
 
         when(screenMode){
@@ -87,29 +98,14 @@ class ShopItemFragment
 
 
     private fun observeViewModel(){
-        viewModel.errorInputCount_LD.observe(viewLifecycleOwner){
-            val message =   if(it){
-                getString(R.string.error_input_count)
-            } else{
-                null
-            }
-            titleCount.error = message
-        }
-        viewModel.errorInputName_LD.observe(viewLifecycleOwner){
-            val message =   if(it){
-                getString(R.string.error_input_name)
-            } else{
-                null
-            }
-            titleName.error = message
-        }
+
         viewModel.shouldCloseScreen_LD.observe(viewLifecycleOwner){
            onEditingFinishedListner?.onEditingFinished()
         }
     }
 
     private fun addTextChangeListner(){
-        etName.addTextChangedListener(object : TextWatcher{
+        binding.textInputName.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -119,7 +115,7 @@ class ShopItemFragment
             }
 
         })
-        etCount.addTextChangedListener(object : TextWatcher {
+        binding.textInputCount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -133,17 +129,16 @@ class ShopItemFragment
 
     private fun launchEditMode(){
         viewModel.getShopItemInVM(shopItemId)
-        viewModel.shopItem_LD.observe(viewLifecycleOwner){
-            etName.setText(it.name)
-            etCount.setText(it.count.toString())
-        }
-        buttonSave.setOnClickListener{
-            viewModel.editShopItemInVM(etName.text?.toString(), etCount.text?.toString())
+        binding.saveButton.setOnClickListener{
+            viewModel.editShopItemInVM(
+                binding.textInputName.text?.toString(),
+                binding.textInputCount.text?.toString())
         }
     }
+
     private fun launchAddMode(){
-        buttonSave.setOnClickListener{
-            viewModel.addShopItemInVM(etName.text?.toString(), etCount.text?.toString())
+        binding.saveButton.setOnClickListener{
+            viewModel.addShopItemInVM(binding.textInputName.text?.toString(),  binding.textInputCount.text?.toString())
         }
     }
 
@@ -168,13 +163,6 @@ class ShopItemFragment
     }
 
 
-    private fun xmlView(view: View){
-        titleName   = view.findViewById(R.id.titleNameLayout)
-        titleCount  = view.findViewById(R.id.titleCountLayout)
-        etName  = view.findViewById(R.id.textInputName)
-        etCount = view.findViewById(R.id.textInputCount)
-        buttonSave  = view.findViewById(R.id.save_button)
-    }
 
 
     interface OnEditingFinishedListner {
