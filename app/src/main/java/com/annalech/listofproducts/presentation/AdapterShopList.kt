@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
+import com.annalech.listofproducts.databinding.ItemShopDisabledBinding
+import com.annalech.listofproducts.databinding.ItemShopEnableBinding
 import com.annalech.listofproducts.domain.ShopItem
 
 
@@ -36,11 +40,13 @@ class AdapterShopList : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCol
             else -> throw RuntimeException("Unknown view type in getItemViewType(): $viewType ")
         }
 
-        val view =  LayoutInflater.from(parent.context).inflate(
-           layote,
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            layote,
             parent,
-            false)
-        return ShopItemViewHolder(view)
+            false
+        )
+        return ShopItemViewHolder(binding)
     }
 
 //    override fun getItemCount(): Int {
@@ -50,32 +56,41 @@ class AdapterShopList : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCol
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         val item = getItem(position)
 
-        holder.view.setOnLongClickListener{
+        val binding = holder.binding
+
+        binding.root.setOnLongClickListener{
             onLongClickShopItemListner?.invoke( item)
             Log.d("MainActivityShopItem", "изменение цвета при нажатии долгом $item $count")
             true
         }
 
-        holder.view.setOnClickListener{
+        binding.root.setOnClickListener{
             Log.d("MainActivityShopItem", "Переход на другую страницу при нажатии $item $count")
             onShortClickShopItemListner?.invoke(item)
         }
 
-        if (item.enabled){
-            holder.tvName.text = item.name
-            holder.tvCount.text = item.count.toString()
-            holder.tvName.setTextColor(
-                ContextCompat.getColor(holder.view.context,
-                    android.R.color.black))
-            holder.tvCount.setTextColor(ContextCompat.getColor(holder.view.context, android.R.color.black))
-        }
-        else{
-            holder.tvName.text = item.name
-            holder.tvCount.text = item.count.toString()
-            holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,
-                android.R.color.white))
+//        if (item.enabled){
+//            binding.tvName.text = item.name
+//            binding.tvCount.text = item.count.toString()
+//            holder.tvName.setTextColor(
+//                ContextCompat.getColor(holder.view.context,
+//                    android.R.color.black))
+//            holder.tvCount.setTextColor(ContextCompat.getColor(holder.view.context, android.R.color.black))
+//        }
+//        else{
+            when(binding) {
+                is ItemShopDisabledBinding -> {
+                    binding.nameItem.text = item.name
+                    binding.itemCount.text = item.count.toString()
+                }
 
-        }
+                is ItemShopEnableBinding -> {
+                    binding.nameItem.text = item.name
+                    binding.itemCount.text = item.count.toString()
+                }
+            }
+
+
 
 
 
