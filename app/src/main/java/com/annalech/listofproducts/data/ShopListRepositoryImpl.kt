@@ -5,14 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.annalech.listofproducts.domain.ShopItem
 import com.annalech.listofproducts.domain.ShopListRepository
+import javax.inject.Inject
 
-class ShopListRepositoryImpl(
-    application: Application
+class ShopListRepositoryImpl @Inject constructor(
+    private val shopListDao : ShopListDao,
+      private val mapper :ShopListItemMapper
 ) : ShopListRepository {
 
 
-    private val shopListDao = AppDataBase.getInstance(application).shopListDao()
-    private val mapper = ShopListItemMapper()
+
 
 
 

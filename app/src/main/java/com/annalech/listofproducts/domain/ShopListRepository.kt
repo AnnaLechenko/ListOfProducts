@@ -1,6 +1,7 @@
 package com.annalech.listofproducts.domain
 
 import androidx.lifecycle.LiveData
+import javax.inject.Inject
 
 interface ShopListRepository {
    suspend fun addItemToTheShopList(shopItem: ShopItem)

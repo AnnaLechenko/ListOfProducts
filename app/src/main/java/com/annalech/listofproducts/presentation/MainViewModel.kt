@@ -14,15 +14,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel (application: Application): AndroidViewModel(application) {
-    private val repository = ShopListRepositoryImpl(application)
+class MainViewModel @Inject constructor(
+    val useCaseDeleteItem : DeleteShopItemInListUseCase,
+    val useCaseGetList: GetListShopListUseCase,
+    val useCaseEditItem : EditShopItemUseCase
+
+):  ViewModel() {
 
 //    private val scope = CoroutineScope(Dispatchers.IO)   //фоновый поток
 
-    val useCaseDeleteItem = DeleteShopItemInListUseCase(repository)
-    val useCaseGetList = GetListShopListUseCase(repository)
-    val useCaseEditItem = EditShopItemUseCase(repository)
+
 
 
     val shopListLiveData = useCaseGetList.getShopList()

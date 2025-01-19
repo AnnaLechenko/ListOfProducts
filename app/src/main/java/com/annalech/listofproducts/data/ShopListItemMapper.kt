@@ -1,8 +1,9 @@
 package com.annalech.listofproducts.data
 
 import com.annalech.listofproducts.domain.ShopItem
+import javax.inject.Inject
 
-class ShopListItemMapper {
+class ShopListItemMapper  @Inject constructor(){
 
     fun mapEntityToDbModel(shopItem: ShopItem):ShopItemDbModel{
         return  ShopItemDbModel(

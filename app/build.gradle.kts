@@ -9,7 +9,6 @@ plugins {
 android {
     namespace = "com.annalech.listofproducts"
     compileSdk = 35
-
     defaultConfig {
         applicationId = "com.annalech.listofproducts"
         minSdk = 24
