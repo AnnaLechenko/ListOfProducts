@@ -24,6 +24,7 @@ class MainViewModel (application: Application): AndroidViewModel(application) {
     val useCaseGetList = GetListShopListUseCase(repository)
     val useCaseEditItem = EditShopItemUseCase(repository)
 
+
     val shopListLiveData = useCaseGetList.getShopList()
 
 
