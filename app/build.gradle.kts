@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     id("kotlin-kapt")
+
 }
 
 android {
@@ -57,4 +58,7 @@ dependencies {
     implementation(libs.room)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+    implementation ("com.google.dagger:dagger:2.35.1")
+    kapt ("com.google.dagger:dagger-compiler:2.35.1")
+
 }
