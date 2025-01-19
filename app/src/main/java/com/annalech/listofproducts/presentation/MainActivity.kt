@@ -16,6 +16,7 @@ import com.annalech.listofproducts.R
 import com.annalech.listofproducts.databinding.ActivityMainBinding
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListner{
 
@@ -24,8 +25,16 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
 
     private lateinit var binding: ActivityMainBinding
 
+    @Inject
+    lateinit var viewModelFactory :ViewModelFactory
+    private val components by lazy {
+        (application as ShopApp).components
+    }
+
     private var count =0
     override fun onCreate(savedInstanceState: Bundle?) {
+        components.inject(this)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 //        setContentView(R.layout.activity_main)
@@ -33,7 +42,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)  //доступ к классу с лив дата
+        viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)  //доступ к классу с лив дата
 
         viewModel.shopListLiveData.observe(this){
             Log.d("ViewModelTest", it.toString())
