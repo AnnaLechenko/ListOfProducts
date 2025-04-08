@@ -45,7 +45,6 @@ class ShopListProvider : ContentProvider() {
             }
             else->null
         }
-   //    Log.d("ShopListProvider"," query $uri $code")
         return x
     }
 
@@ -71,9 +70,8 @@ class ShopListProvider : ContentProvider() {
                     )
                 )
             }
-
         }
-        //    Log.d("ShopListProvider"," query $uri $code")
+
 
     return null
 

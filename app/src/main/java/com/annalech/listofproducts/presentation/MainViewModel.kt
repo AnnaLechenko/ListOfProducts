@@ -23,20 +23,12 @@ class MainViewModel @Inject constructor(
 
 ):  ViewModel() {
 
-//    private val scope = CoroutineScope(Dispatchers.IO)   //фоновый поток
-
-
-
-
     val shopListLiveData = useCaseGetList.getShopList()
-
-
 
     fun deleteItemLD(item: ShopItem){
        viewModelScope.launch {
             useCaseDeleteItem.deleteItemInList(item)
         }
-
     }
 
     fun editEnanleStateItemLD(item: ShopItem){
