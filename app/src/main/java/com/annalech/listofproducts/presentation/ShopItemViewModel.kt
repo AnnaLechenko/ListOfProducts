@@ -23,7 +23,6 @@ class ShopItemViewModel @Inject constructor(
     val editItemUseCase:EditShopItemUseCase
 ) :  ViewModel(){
 
-
     private val _errorInputName_LD = MutableLiveData<Boolean>()
     val errorInputName_LD : LiveData<Boolean>
         get() =  _errorInputName_LD
@@ -32,27 +31,19 @@ class ShopItemViewModel @Inject constructor(
     val errorInputCount_LD : LiveData<Boolean>
         get() =  _errorInputCount_LD
 
-
-
     private val _shouldCloseScreen_LD = MutableLiveData<Unit>()
     val shouldCloseScreen_LD : LiveData<Unit>
         get() = _shouldCloseScreen_LD
 
-
-
-
     private val _shopItem_LD = MutableLiveData<ShopItem>()
     val shopItem_LD: LiveData<ShopItem>
         get() = _shopItem_LD
-
-
 
     fun getShopItemInVM(ItemId:Int){
        viewModelScope.launch {
             val item =  getItemUseCase.getShopItem(ItemId)
             _shopItem_LD.value = item
         }
-
     }
 
     fun addShopItemInVM(inputName:String?, inputCount : String?){

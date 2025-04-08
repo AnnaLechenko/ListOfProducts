@@ -34,13 +34,11 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
         (application as ShopApp).components
     }
 
-    private var count =0
     override fun onCreate(savedInstanceState: Bundle?) {
         components.inject(this)
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-//        setContentView(R.layout.activity_main)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -52,7 +50,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
             adapterShopList.submitList(it)
         }
 
-
         binding.buttonAddItem.setOnClickListener{
             if(windowOrientationVertical()){
                 val intent = ShopItemActivity.newIntentAddItem(this)
@@ -62,9 +59,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
             }
         }
 
-
         provider()
-
     }
 
     private fun windowOrientationVertical():Boolean{
@@ -110,7 +105,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val item = adapterShopList.currentList[viewHolder.adapterPosition]
-//                viewModel.deleteItemLD(item)
                thread {
                    contentResolver.delete(
                        Uri.parse("content://com.annalech.listofproducts/shop_items"),
@@ -137,8 +131,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
                     else{
                         launchFragment(ShopItemFragment.newInstansEditItem(it.id))
                     }
-
-
         }
     }
 
@@ -176,24 +168,9 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
                    id = id, name = name, count = count, enabled = enabled
                )
                 Log.d("ShopListProvider", " Cursor  ${info.toString()}")
-
             }
             cursor?.close()
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 

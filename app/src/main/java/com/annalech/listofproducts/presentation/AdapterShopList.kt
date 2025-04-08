@@ -73,17 +73,6 @@ class AdapterShopList : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCol
             }
         }
 
-//        if (item.enabled){
-//            binding.tvName.text = item.name
-//            binding.tvCount.text = item.count.toString()
-//            holder.tvName.setTextColor(
-//                ContextCompat.getColor(holder.view.context,
-//                    android.R.color.black))
-//            holder.tvCount.setTextColor(ContextCompat.getColor(holder.view.context, android.R.color.black))
-//        }
-//        else{
-
-
 
 
 

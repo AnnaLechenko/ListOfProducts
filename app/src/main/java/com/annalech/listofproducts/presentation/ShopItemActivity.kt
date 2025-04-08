@@ -59,10 +59,6 @@ class ShopItemActivity : AppCompatActivity(), OnEditingFinishedListner {
             shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID,ShopItem.UNDEFINED_ID)
         }
     }
-
-
-
-
     companion object{
         private const val EXTRA_SCREEN_MODE = "extra_mode"
         private const val EXTRA_SHOP_ITEM_ID = "extra_mode_id"
@@ -85,15 +81,10 @@ class ShopItemActivity : AppCompatActivity(), OnEditingFinishedListner {
             int.putExtra(EXTRA_SHOP_ITEM_ID,shopItemId)
             return int
         }
-
-
-
-
     }
 
     override fun onEditingFinished() {
         Toast.makeText(this@ShopItemActivity,"Sucsess", Toast.LENGTH_LONG).show()
         finish()
     }
-
 }

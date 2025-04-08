@@ -23,10 +23,8 @@ import javax.inject.Inject
 import kotlin.concurrent.thread
 
 
-class ShopItemFragment
-    :Fragment(){
-
-        private lateinit var onEditingFinishedListner:OnEditingFinishedListner
+class ShopItemFragment :Fragment(){
+    private lateinit var onEditingFinishedListner:OnEditingFinishedListner
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
 
@@ -38,16 +36,7 @@ class ShopItemFragment
     private val components by lazy {
         (requireActivity().application as ShopApp).components
     }
-
-//
-//    private lateinit var titleName :TextInputLayout
-//    private lateinit var titleCount:TextInputLayout
-//    private lateinit var etName:EditText
-//    private lateinit var etCount:EditText
-//    private lateinit var buttonSave:Button
-
     private lateinit var viewModel: ShopItemViewModel
-
 
     override fun onAttach(context: Context) {
         components.inject(this)
@@ -96,22 +85,27 @@ class ShopItemFragment
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     private fun observeViewModel(){
 
         viewModel.shouldCloseScreen_LD.observe(viewLifecycleOwner){
-           onEditingFinishedListner?.onEditingFinished()
+           onEditingFinishedListner.onEditingFinished()
+        }
+
+        viewModel.errorInputCount_LD.observe(viewLifecycleOwner) {
+            val message = if (it) {
+                getString(R.string.error_input_count)
+            } else {
+                null
+            }
+            binding.titleCountLayout.error= message
+        }
+        viewModel.errorInputName_LD.observe(viewLifecycleOwner) {
+            val message = if (it) {
+                getString(R.string.error_input_name)
+            } else {
+                null
+            }
+            binding.titleNameLayout.error = message
         }
     }
 
@@ -149,20 +143,9 @@ class ShopItemFragment
 
     private fun launchAddMode(){
         binding.saveButton.setOnClickListener{
-          //  viewModel.addShopItemInVM(binding.textInputName.text?.toString(),  binding.textInputCount.text?.toString())
-       thread {
-           context?.contentResolver?.insert(
-               Uri.parse("content://com.annalech.listofproducts/shop_items"),
-               ContentValues().apply {
-                   put("id",0)
-                   put("name",binding.textInputName.text?.toString())
-                   put("count", binding.textInputCount.text?.toString())
-                   put("enabled",true)
-               }
-
-           )
-       }
-
+           viewModel.addShopItemInVM(
+               binding.textInputName.text?.toString(),
+               binding.textInputCount.text?.toString())
         }
     }
 
@@ -186,12 +169,11 @@ class ShopItemFragment
 
     }
 
-
-
-
     interface OnEditingFinishedListner {
         fun onEditingFinished()
     }
+
+
 
 
     companion object{
@@ -201,7 +183,6 @@ class ShopItemFragment
         private const val MODE_EDIT = "mode_edit"
         private const val MODE_UNKNOWN = ""
 
-
         fun newInstanseAddItem():ShopItemFragment{
 
           return  ShopItemFragment().apply {
@@ -209,11 +190,6 @@ class ShopItemFragment
                     putString(SCREEN_MODE, MODE_ADD)
                 }
             }
-            //полный варик
-//            arg.putString(SCREEN_MODE, MODE_ADD)
-//            val fragment = ShopItemFragment()
-//            fragment.arguments = arg
-//            return  fragment
         }
         fun newInstansEditItem(shopItemId:Int):ShopItemFragment{
             return ShopItemFragment().apply {
