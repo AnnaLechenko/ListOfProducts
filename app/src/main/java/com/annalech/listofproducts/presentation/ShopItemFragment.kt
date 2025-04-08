@@ -90,23 +90,6 @@ class ShopItemFragment :Fragment(){
         viewModel.shouldCloseScreen_LD.observe(viewLifecycleOwner){
            onEditingFinishedListner.onEditingFinished()
         }
-
-        viewModel.errorInputCount_LD.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                getString(R.string.error_input_count)
-            } else {
-                null
-            }
-            binding.titleCountLayout.error= message
-        }
-        viewModel.errorInputName_LD.observe(viewLifecycleOwner) {
-            val message = if (it) {
-                getString(R.string.error_input_name)
-            } else {
-                null
-            }
-            binding.titleNameLayout.error = message
-        }
     }
 
     private fun addTextChangeListner(){
