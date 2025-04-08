@@ -8,4 +8,6 @@ class AddShopItemUseCase @Inject constructor(
     suspend fun addItemToTheShopList(shopItem: ShopItem){
         repository.addItemToTheShopList(shopItem)
     }
+
+
 }

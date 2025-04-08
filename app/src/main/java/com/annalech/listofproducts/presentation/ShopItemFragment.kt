@@ -1,6 +1,8 @@
 package com.annalech.listofproducts.presentation
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,7 @@ import com.annalech.listofproducts.presentation.ShopItemActivity.Companion
 
 import com.google.android.material.textfield.TextInputLayout
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 
 class ShopItemFragment
@@ -146,7 +149,20 @@ class ShopItemFragment
 
     private fun launchAddMode(){
         binding.saveButton.setOnClickListener{
-            viewModel.addShopItemInVM(binding.textInputName.text?.toString(),  binding.textInputCount.text?.toString())
+          //  viewModel.addShopItemInVM(binding.textInputName.text?.toString(),  binding.textInputCount.text?.toString())
+       thread {
+           context?.contentResolver?.insert(
+               Uri.parse("content://com.annalech.listofproducts/shop_items"),
+               ContentValues().apply {
+                   put("id",0)
+                   put("name",binding.textInputName.text?.toString())
+                   put("count", binding.textInputCount.text?.toString())
+                   put("enabled",true)
+               }
+
+           )
+       }
+
         }
     }
 

@@ -1,6 +1,7 @@
 package com.annalech.listofproducts.presentation
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
 import com.annalech.listofproducts.databinding.ActivityMainBinding
+import com.annalech.listofproducts.domain.ShopItem
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListner{
 
@@ -56,15 +59,11 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
                 startActivity(intent)
             } else{
                 launchFragment(ShopItemFragment.newInstanseAddItem())
-
-
-
-
-
             }
-
         }
 
+
+        provider()
 
     }
 
@@ -110,8 +109,16 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = adapterShopList.currentList[viewHolder.adapterPosition]
-                viewModel.deleteItemLD(item)
+                    val item = adapterShopList.currentList[viewHolder.adapterPosition]
+//                viewModel.deleteItemLD(item)
+               thread {
+                   contentResolver.delete(
+                       Uri.parse("content://com.annalech.listofproducts/shop_items"),
+                       null,
+                       arrayOf(item.id.toString())
+                   )
+               }
+
             }
         }
 
@@ -146,6 +153,46 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
         Toast.makeText(this@MainActivity,"Sucsess", Toast.LENGTH_LONG).show()
         supportFragmentManager.popBackStack()
     }
+
+
+    private fun provider(){
+        thread {
+            val cursor =   contentResolver.query(
+                Uri.parse("content://com.annalech.listofproducts/shop_items"),
+                null,
+                null,
+                null,
+                null,
+                null
+            )
+            while (cursor?.moveToNext() == true){
+
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                val count = cursor.getInt(cursor.getColumnIndexOrThrow("count"))
+                val enabled = cursor.getInt(cursor.getColumnIndexOrThrow("enabled")) > 0
+
+               val info = ShopItem(
+                   id = id, name = name, count = count, enabled = enabled
+               )
+                Log.d("ShopListProvider", " Cursor  ${info.toString()}")
+
+            }
+            cursor?.close()
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

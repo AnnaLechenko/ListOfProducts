@@ -33,7 +33,6 @@ abstract class AppDataBase :RoomDatabase(){
                     AppDataBase::class.java,
                     DB_NAME
                 )
-//                    .allowMainThreadQueries()
                      .build()
                 INSTANCE = db
                 return db
