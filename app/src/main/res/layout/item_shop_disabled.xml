@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="shopItem"
+            type="com.annalech.listofproducts.domain.ShopItem" />
+    </data>
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,6 +36,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="Товар XXXX"
+            android:text="@{shopItem.name}"
             />
 
         <TextView
@@ -38,10 +46,12 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@color/white"
-            tools:text="N"/>
+            tools:text="N"
+            android:text="@{String.valueOf(shopItem.count)}"
+            />
 
 
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</androidx.cardview.widget.CardView></layout>

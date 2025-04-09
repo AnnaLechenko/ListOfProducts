@@ -2,15 +2,13 @@ package com.annalech.listofproducts.presentation
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.annalech.listofproducts.R
+import com.annalech.listofproducts.databinding.ItemShopDisabledBinding
+import com.annalech.listofproducts.databinding.ItemShopEnableBinding
 import com.annalech.listofproducts.domain.ShopItem
 
 
@@ -36,11 +34,13 @@ class AdapterShopList : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCol
             else -> throw RuntimeException("Unknown view type in getItemViewType(): $viewType ")
         }
 
-        val view =  LayoutInflater.from(parent.context).inflate(
-           layote,
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
+            layote,
             parent,
-            false)
-        return ShopItemViewHolder(view)
+            false
+        )
+        return ShopItemViewHolder(binding)
     }
 
 //    override fun getItemCount(): Int {
@@ -48,34 +48,32 @@ class AdapterShopList : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCol
 //    }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val item = getItem(position)
+        val shopItem = getItem(position)
 
-        holder.view.setOnLongClickListener{
-            onLongClickShopItemListner?.invoke( item)
-            Log.d("MainActivityShopItem", "изменение цвета при нажатии долгом $item $count")
+        val binding = holder.binding
+
+        binding.root.setOnLongClickListener{
+            onLongClickShopItemListner?.invoke( shopItem)
+            Log.d("MainActivityShopItem", "изменение цвета при нажатии долгом $shopItem $count")
             true
         }
 
-        holder.view.setOnClickListener{
-            Log.d("MainActivityShopItem", "Переход на другую страницу при нажатии $item $count")
-            onShortClickShopItemListner?.invoke(item)
+        binding.root.setOnClickListener{
+            Log.d("MainActivityShopItem", "Переход на другую страницу при нажатии $shopItem $count")
+            onShortClickShopItemListner?.invoke(shopItem)
         }
 
-        if (item.enabled){
-            holder.tvName.text = item.name
-            holder.tvCount.text = item.count.toString()
-            holder.tvName.setTextColor(
-                ContextCompat.getColor(holder.view.context,
-                    android.R.color.black))
-            holder.tvCount.setTextColor(ContextCompat.getColor(holder.view.context, android.R.color.black))
-        }
-        else{
-            holder.tvName.text = item.name
-            holder.tvCount.text = item.count.toString()
-            holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,
-                android.R.color.white))
 
+        when(binding){
+            is ItemShopDisabledBinding ->{
+                binding.shopItem = shopItem
+            }
+            is ItemShopEnableBinding ->{
+                binding.shopItem = shopItem
+            }
         }
+
+
 
 
 

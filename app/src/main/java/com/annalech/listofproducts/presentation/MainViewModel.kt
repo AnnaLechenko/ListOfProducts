@@ -1,32 +1,41 @@
 package com.annalech.listofproducts.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.annalech.listofproducts.data.ShopListRepositoryImpl
 import com.annalech.listofproducts.domain.DeleteShopItemInListUseCase
 import com.annalech.listofproducts.domain.EditShopItemUseCase
 import com.annalech.listofproducts.domain.GetListShopListUseCase
 import com.annalech.listofproducts.domain.ShopItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
-    private val repository = ShopListRepositoryImpl
+class MainViewModel @Inject constructor(
+    val useCaseDeleteItem : DeleteShopItemInListUseCase,
+    val useCaseGetList: GetListShopListUseCase,
+    val useCaseEditItem : EditShopItemUseCase
 
-
-    val useCaseDeleteItem = DeleteShopItemInListUseCase(repository)
-    val useCaseGetList = GetListShopListUseCase(repository)
-    val useCaseEditItem = EditShopItemUseCase(repository)
+):  ViewModel() {
 
     val shopListLiveData = useCaseGetList.getShopList()
 
-
-
     fun deleteItemLD(item: ShopItem){
-        useCaseDeleteItem.deleteItemInList(item)
+       viewModelScope.launch {
+            useCaseDeleteItem.deleteItemInList(item)
+        }
     }
 
     fun editEnanleStateItemLD(item: ShopItem){
-        val newItem = item.copy(enabled = !item.enabled)
-        useCaseEditItem.editItemInList(newItem)
+        viewModelScope.launch {
+            val newItem = item.copy(enabled = !item.enabled)
+            useCaseEditItem.editItemInList(newItem)
+        }
     }
 
 
